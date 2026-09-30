@@ -4,4 +4,5 @@
 
 ## Releases
 
+- [0.2.x](docs/changelogs/0.2.md) — 2026-10-01
 - [0.1.x](docs/changelogs/0.1.md) — 2026-09-30

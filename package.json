@@ -1,29 +1,66 @@
 {
   "name": "naigi-ui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Cross-platform Electron desktop client for Naigi",
-  "engines": { "node": ">=22" },
+  "author": "Naigi contributors",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
   "main": "src/main.cjs",
   "scripts": {
-    "start": "electron .",
-    "check": "node --check src/main.cjs && node --check src/preload.cjs && node --check src/launcher.js",
-    "test": "node --test",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "start": "npm run build:frontend && electron .",
+    "build:frontend": "node scripts/build-frontend.mjs",
+    "check": "node --check src/main.cjs && node --check src/preload.cjs && node --check src/chat-preload.cjs && node --check src/server-url.cjs && node --check src/desktop-protocol.cjs && node --check src/realtime-proxy.cjs && node --check src/launcher.js && node --check scripts/build-frontend.mjs",
+    "test": "node --test test/*.test.cjs",
+    "pack": "npm run build:frontend && electron-builder --dir",
+    "dist": "npm run build:frontend && electron-builder"
   },
   "devDependencies": {
+    "@matrix-org/matrix-sdk-crypto-wasm": "^18.9.0",
     "electron": "^42.0.0",
-    "electron-builder": "^26.0.0"
+    "electron-builder": "^26.0.0",
+    "esbuild": "^0.25.12",
+    "firebase": "^12.19.0",
+    "gifenc": "^1.0.3",
+    "gifuct-js": "^2.1.2",
+    "livekit-client": "^2.22.3",
+    "lucide": "^1.49.0",
+    "qrcode": "^1.5.4"
   },
   "build": {
     "appId": "chat.naigi.desktop",
     "productName": "Naigi",
-    "directories": { "output": "dist" },
-    "files": ["src/**/*", "package.json"],
+    "directories": {
+      "output": "dist"
+    },
+    "files": ["src/**/*", ".build/frontend/**/*", "package.json"],
     "asar": true,
-    "win": { "target": ["nsis"] },
-    "mac": { "target": ["dmg"], "category": "public.app-category.social-networking", "extendInfo": { "NSMicrophoneUsageDescription": "Naigi uses your microphone for encrypted voice calls.", "NSCameraUsageDescription": "Naigi uses your camera when you choose to share video." } },
-    "linux": { "target": ["AppImage", "deb"], "category": "Network" }
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.social-networking",
+      "extendInfo": {
+        "NSMicrophoneUsageDescription": "Naigi uses your microphone for encrypted voice calls.",
+        "NSCameraUsageDescription": "Naigi uses your camera when you choose to share video."
+      }
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Network"
+    }
+  },
+  "dependencies": {
+    "ws": "^8.22.0"
   }
 }

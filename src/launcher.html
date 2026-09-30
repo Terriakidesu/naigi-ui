@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; form-action 'none'; base-uri 'none'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; form-action 'none'; base-uri 'none'; connect-src 'none'">
     <title>Connect to Naigi</title>
     <link rel="stylesheet" href="launcher.css">
   </head>
@@ -15,9 +15,14 @@
       <form id="connect-form">
         <label for="server">Server address</label>
         <input id="server" type="url" placeholder="https://chat.example.com" required autocomplete="url" autofocus>
+        <button id="check-server" class="secondary" type="button">Check server</button>
         <button id="connect" type="submit">Connect</button>
       </form>
       <p id="status" role="status" aria-live="polite"></p>
+      <section class="version-card" aria-label="Version information">
+        <div><span>Desktop app</span><strong id="app-version">Checking…</strong></div>
+        <div><span>Naigi server</span><strong id="server-version">Not checked</strong></div>
+      </section>
       <small>HTTPS required. Local development can use http://localhost:3000.</small>
     </main>
     <script src="launcher.js"></script>

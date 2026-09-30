@@ -27,7 +27,7 @@ npm run pack
 npm run dist
 ```
 
-Build on each target platform (or a CI matrix): Windows NSIS installer, macOS DMG, and Linux AppImage/deb. Outputs go to `dist/`. Public releases need platform signing/notarization configuration and app icons; neither is configured yet. macOS signing requires a Mac.
+Build on each target platform (or a CI matrix): Windows NSIS installer and ZIP, macOS DMG, and Linux AppImage/deb. Outputs go to `dist/`. The Windows ZIP contains the runnable app directory (`Naigi.exe` plus its resources); the executable must stay with those files. Public releases need platform signing/notarization configuration and app icons; neither is configured yet. macOS signing requires a Mac.
 
 ## Security and limitations
 

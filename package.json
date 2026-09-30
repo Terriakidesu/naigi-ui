@@ -3,6 +3,8 @@
   "version": "0.2.0",
   "private": true,
   "description": "Cross-platform Electron desktop client for Naigi",
+  "homepage": "https://github.com/Terriakidesu/naigi-ui",
+  "desktopName": "Naigi",
   "author": "Naigi contributors",
   "license": "MIT",
   "engines": {
@@ -39,7 +41,8 @@
     "asar": true,
     "win": {
       "target": [
-        "nsis"
+        "nsis",
+        "zip"
       ]
     },
     "mac": {
@@ -57,7 +60,9 @@
         "AppImage",
         "deb"
       ],
-      "category": "Network"
+      "category": "Network",
+      "maintainer": "Naigi contributors",
+      "syncDesktopName": true
     }
   },
   "dependencies": {

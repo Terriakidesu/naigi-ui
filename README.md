@@ -1,6 +1,6 @@
 # Naigi Desktop
 
-Standalone Node.js/Electron desktop client for [Naigi](../priv-chat). The chat frontend is bundled in this app; the separately self-hosted Naigi server provides the API and stores account data. No Bun runtime is used in this repository.
+Standalone Node.js/Electron desktop client for the [Naigi server](https://github.com/Terriakidesu/naigi). The chat frontend is bundled in this app; the separately self-hosted server provides the API and stores account data. No Bun runtime is used in this repository.
 
 ## Development
 
@@ -11,7 +11,7 @@ npm install
 npm start
 ```
 
-Run the backend separately from `../priv-chat`. On launch, enter your server origin, such as `https://chat.example.com` or `http://localhost:3000` for loopback development. **Check server** validates reachability and shows the server's version before connecting. Use **File → Change server…** to connect elsewhere.
+Run the [Naigi server](https://github.com/Terriakidesu/naigi) separately during development. On launch, enter your server origin, such as `https://chat.example.com` or `http://localhost:3000` for loopback development. **Check server** validates reachability and shows the server's version before connecting. Use **File → Change server…** to connect elsewhere.
 
 The user-facing chat frontend source is maintained in `frontend/client/` and bundled by `npm run build:frontend`; the server's admin console is intentionally not included. The local frontend talks to the selected server's `/v1` user API through a restricted main-process bridge; the server does not supply the desktop UI. Each server gets its own persistent Electron session, including its login cookie, encrypted crypto store, and preferences. Switching servers does not erase saved sessions or encryption keys.
 

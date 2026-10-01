@@ -1,6 +1,6 @@
 {
   "name": "naigi-ui",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "private": true,
   "description": "Cross-platform Electron desktop client for Naigi",
   "homepage": "https://github.com/Terriakidesu/naigi-ui",

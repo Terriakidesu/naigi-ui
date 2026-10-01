@@ -2,6 +2,7 @@ export type DesktopInfo = {
   appVersion: string;
   serverVersion: string | null;
   serverOrigin: string;
+  customTitleBar?: boolean;
 };
 
 declare global {

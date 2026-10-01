@@ -9,7 +9,7 @@ npm install
 npm start
 ```
 
-Start the [Naigi server](https://github.com/Terriakidesu/naigi) separately and select its origin in the launcher. No Bun runtime is required for the desktop project.
+Start the [Naigi server](https://github.com/Terriakidesu/naigi) separately and select its origin in the launcher. No Bun runtime is required for the desktop project. For a local Caddy certificate, use `npm run start:with-ca`; it trusts `~/Desktop/caddy-root.crt` by default, or `NAIGI_CA_CERT` can specify another PEM certificate path.
 
 ## Source layout
 

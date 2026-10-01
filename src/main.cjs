@@ -1,10 +1,11 @@
 const { app, BrowserWindow, ipcMain, Menu, dialog, shell, protocol, session } = require("electron");
-const fs = require("node:fs/promises");
 const path = require("node:path");
 const { pathToFileURL } = require("node:url");
 const { normalizeServerUrl } = require("./server-url.cjs");
+const { createSavedServerStore } = require("./saved-servers.cjs");
 const { APP_ORIGIN, createProtocolHandler } = require("./desktop-protocol.cjs");
 const { createRealtimeProxy } = require("./realtime-proxy.cjs");
+const { cookieHeader, storeResponseCookies } = require("./session-cookies.cjs");
 
 protocol.registerSchemesAsPrivileged([{
   scheme: "naigi",
@@ -22,14 +23,7 @@ const launcherUrl = pathToFileURL(launcherPath).href;
 const appUrl = `${APP_ORIGIN}/`;
 const frontendRoot = path.join(__dirname, "..", ".build", "frontend");
 const configPath = () => path.join(app.getPath("userData"), "server.json");
-
-async function savedServer() {
-  try {
-    return normalizeServerUrl(JSON.parse(await fs.readFile(configPath(), "utf8")).server);
-  } catch {
-    return "";
-  }
-}
+let savedServers;
 
 function isAppUrl(value) {
   try {
@@ -50,7 +44,7 @@ function openExternal(value) {
 async function showLauncher() {
   if (launcher && !launcher.isDestroyed()) { launcher.focus(); return; }
   launcher = new BrowserWindow({
-    width: 520, height: 570, minWidth: 420, minHeight: 510,
+    width: 520, height: 700, minWidth: 420, minHeight: 510,
     title: "Connect to Naigi", autoHideMenuBar: true,
     webPreferences: { preload: path.join(__dirname, "preload.cjs"), nodeIntegration: false, contextIsolation: true, sandbox: true }
   });
@@ -100,10 +94,6 @@ async function probeServer(origin) {
   return version;
 }
 
-function cookieHeader(cookies) {
-  return cookies.map(({ name, value }) => `${name}=${value}`).join("; ");
-}
-
 async function proxyApiRequest(request, appSession, origin) {
   const target = require("./desktop-protocol.cjs").apiTarget(origin, request.url);
   const headers = new Headers();
@@ -111,7 +101,7 @@ async function proxyApiRequest(request, appSession, origin) {
   for (const [name, value] of request.headers) {
     if (!blockedHeaders.has(name.toLowerCase()) && !name.toLowerCase().startsWith("sec-")) headers.set(name, value);
   }
-  const cookies = await appSession.cookies.get({ url: `${APP_ORIGIN}/` });
+  const cookies = await appSession.cookies.get({ url: target.href });
   if (cookies.length) headers.set("cookie", cookieHeader(cookies));
 
   const options = { method: request.method, headers, redirect: "manual", signal: request.signal };
@@ -120,6 +110,7 @@ async function proxyApiRequest(request, appSession, origin) {
     options.duplex = "half";
   }
   const response = await fetch(target, options);
+  await storeResponseCookies(appSession, response, target.href);
   if (response.status >= 300 && response.status < 400) {
     return Response.json({ error: "unexpected_server_redirect" }, { status: 502, headers: { "cache-control": "no-store" } });
   }
@@ -129,7 +120,6 @@ async function proxyApiRequest(request, appSession, origin) {
   for (const [name, value] of response.headers) {
     if (name.toLowerCase() !== "set-cookie" && !strippedResponseHeaders.has(name.toLowerCase())) responseHeaders.append(name, value);
   }
-  for (const value of response.headers.getSetCookie?.() ?? []) responseHeaders.append("set-cookie", value);
   const body = request.method === "HEAD" || response.status === 204 || response.status === 304 ? null : response.body;
   return new Response(body, { status: response.status, statusText: response.statusText, headers: responseHeaders });
 }
@@ -174,7 +164,11 @@ async function connect(origin, nextServerVersion) {
 
   const window = new BrowserWindow({
     width: 1280, height: 850, minWidth: 800, minHeight: 600,
-    title: "Naigi", show: false,
+    title: "Naigi", show: false, autoHideMenuBar: true,
+    ...(process.platform !== "darwin" ? {
+      titleBarStyle: "hidden",
+      titleBarOverlay: { color: "#11151b", symbolColor: "#b9c1cc", height: 32 },
+    } : {}),
     webPreferences: {
       preload: path.join(__dirname, "chat-preload.cjs"),
       session: appSession,
@@ -249,10 +243,15 @@ async function showAbout() {
 }
 
 app.whenReady().then(async () => {
+  savedServers = createSavedServerStore(configPath());
   app.setAboutPanelOptions({ applicationName: "Naigi", applicationVersion: `v${app.getVersion()}` });
-  ipcMain.handle("naigi:saved-server", (event) => {
+  ipcMain.handle("naigi:saved-servers", (event) => {
     if (!trustedLauncher(event)) throw new Error("Untrusted sender.");
-    return savedServer();
+    return savedServers.list();
+  });
+  ipcMain.handle("naigi:remove-saved-server", (event, input) => {
+    if (!trustedLauncher(event) || typeof input !== "string") throw new Error("Untrusted request.");
+    return savedServers.remove(input.trim());
   });
   ipcMain.handle("naigi:app-version", (event) => {
     if (!trustedLauncher(event)) throw new Error("Untrusted sender.");
@@ -272,15 +271,14 @@ app.whenReady().then(async () => {
     try {
       const origin = normalizeServerUrl(input.trim());
       const nextServerVersion = await probeServer(origin);
-      await fs.mkdir(app.getPath("userData"), { recursive: true });
-      await fs.writeFile(configPath(), JSON.stringify({ server: origin }), { mode: 0o600 });
+      await savedServers.remember(origin);
       await connect(origin, nextServerVersion);
       return { ok: true };
     } catch (error) { return { ok: false, error: error.message }; }
   });
   ipcMain.handle("naigi:desktop-info", (event) => {
     if (!trustedChat(event)) throw new Error("Untrusted sender.");
-    return { appVersion: app.getVersion(), serverVersion: serverVersion ?? null, serverOrigin };
+    return { appVersion: app.getVersion(), serverVersion: serverVersion ?? null, serverOrigin, customTitleBar: process.platform !== "darwin" };
   });
   ipcMain.handle("naigi:realtime-url", (event) => {
     if (!trustedChat(event) || !realtimeProxy) throw new Error("Untrusted request.");

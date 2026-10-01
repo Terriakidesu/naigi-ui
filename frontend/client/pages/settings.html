@@ -39,7 +39,8 @@
               <a class="settings-nav-item" data-settings-tab data-title="Accessibility" data-description="Interface scale, text size, and reduced motion." href="#accessibility"><i data-lucide="zoom-in"></i><span>Accessibility</span></a>
               <a class="settings-nav-item" data-settings-tab data-title="Chat & media" data-description="Message behavior and media previews." href="#chat-media"><i data-lucide="message-square"></i><span>Chat &amp; media</span></a>
               <a class="settings-nav-item" data-settings-tab data-title="Notifications" data-description="Desktop alerts, sounds, and quiet hours." href="#notifications"><i data-lucide="bell"></i><span>Notifications</span></a>
-              <a class="settings-nav-item" data-settings-tab data-title="Voice & audio" data-description="Microphone, playback, push-to-talk, and audio devices." href="#audio"><i data-lucide="headphones"></i><span>Voice &amp; audio</span></a>
+               <a class="settings-nav-item" data-settings-tab data-title="Voice & audio" data-description="Microphone, playback, push-to-talk, and audio devices." href="#audio"><i data-lucide="headphones"></i><span>Voice &amp; audio</span></a>
+               <a id="desktop-about-tab" class="settings-nav-item" data-settings-tab data-title="About" data-description="Desktop and server version information." href="#about" hidden><i data-lucide="info"></i><span>About</span></a>
             </div>
           </nav>
         </aside>
@@ -58,6 +59,22 @@
           </header>
           <div class="settings-main-content">
             <section class="settings-content">
+              <section id="about" class="settings-section" data-settings-view hidden>
+                <p class="eyebrow">ABOUT</p>
+                <h1>Naigi Desktop</h1>
+                <p class="muted">Version information for your desktop app and connected Naigi server.</p>
+                <div id="desktop-version" class="desktop-version" hidden aria-label="Application versions">
+                  <span>Desktop app <strong id="desktop-app-version">—</strong></span>
+                  <span>Naigi server <strong id="desktop-server-version">—</strong></span>
+                </div>
+                <div class="about-licenses">
+                  <h2>Licenses &amp; acknowledgements</h2>
+                  <details><summary>Naigi — MIT License</summary><pre data-license-path="/LICENSE">Loading license…</pre></details>
+                  <details><summary>Twemoji — attribution</summary><pre data-license-path="/assets/twemoji/NOTICE.txt">Loading attribution…</pre></details>
+                  <details><summary>Twemoji artwork — CC BY 4.0</summary><pre data-license-path="/assets/twemoji/LICENSE-GRAPHICS">Loading license…</pre></details>
+                  <details><summary>Third-party packages</summary><p class="muted small">Notices for installed runtime and build dependencies.</p><pre data-license-path="/third-party-licenses.txt">Loading notices…</pre></details>
+                </div>
+              </section>
           <section id="profile" class="settings-section" data-settings-view>
             <header class="settings-section-heading">
               <div>
@@ -133,7 +150,14 @@
              <p class="eyebrow">RECOVERY</p>
               <h1>Bring your history to another device</h1>
               <p class="muted">Approve a new device from one that already has your history, or restore an encrypted backup with your recovery key. Your account password alone cannot unlock history.</p>
-              <label class="history-unlock-field" for="recovery-local-passphrase">Unlock this browser first<input id="recovery-local-passphrase" type="password" autocomplete="off" placeholder="Local encryption passphrase"></label>
+              <form id="recovery-unlock-form" class="history-unlock-field">
+                <label for="recovery-local-passphrase">Local encryption passphrase</label>
+                <div class="history-unlock-controls">
+                  <input id="recovery-local-passphrase" type="password" autocomplete="off" placeholder="Enter this device’s passphrase" aria-describedby="recovery-unlock-status" required>
+                  <button id="recovery-unlock-button" type="submit">Unlock recovery</button>
+                </div>
+                <p id="recovery-unlock-status" class="muted small" role="status" aria-live="polite">Locked. Unlock this device to restore, back up, or transfer history. Your passphrase stays on this device.</p>
+              </form>
               <div class="history-recovery-grid">
                 <section class="history-recovery-card">
                   <h2>Approve from another device</h2>
@@ -181,8 +205,9 @@
               <label for="recovery-file">Recovery backup file<input id="recovery-file" type="file" accept=".naigi-recovery,application/json,text/plain"></label>
               <label for="recovery-import-passphrase">Recovery passphrase<input id="recovery-import-passphrase" type="password" autocomplete="off"></label>
               <button id="import-recovery-button" class="secondary" type="button">Import room keys</button>
-            </div>
-          </section>
+             </div>
+             </details>
+           </section>
             <section id="local-data" class="settings-section" data-settings-view hidden>
               <p class="eyebrow">LOCAL DATA</p>
               <h1>Encrypted message cache</h1>

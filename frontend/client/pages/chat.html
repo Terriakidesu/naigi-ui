@@ -63,10 +63,6 @@
             </span>
               <a class="icon-button" href="/settings#audio" title="Settings" aria-label="Settings"><i data-lucide="settings"></i></a>
             </div>
-            <div id="desktop-version" class="desktop-version" hidden aria-label="Application versions">
-              <span>Desktop app <strong id="desktop-app-version">—</strong></span>
-              <span>Naigi server <strong id="desktop-server-version">—</strong></span>
-            </div>
           </div>
         </aside>
         <button id="mobile-sidebar-backdrop" class="mobile-sidebar-backdrop" type="button" aria-label="Close conversation list"></button>
@@ -89,11 +85,6 @@
                 <span id="channel-icon" class="channel-icon" aria-hidden="true"><i data-lucide="message-square"></i></span>
                 <div class="channel-copy"><h2 id="conversation-title">Choose a conversation</h2><span id="conversation-subtitle" class="channel-subtitle">Messages are end-to-end encrypted</span></div>
               </div>
-              <div id="message-search-container" class="message-search" hidden>
-                 <i data-lucide="search"></i>
-                <input id="message-search" type="search" placeholder="Search this conversation" autocomplete="off">
-                 <button id="message-search-close" class="icon-button" type="button" title="Close search" aria-label="Close search"><i data-lucide="x"></i></button>
-              </div>
             </div>
              <div class="chat-actions">
                 <div id="connection-indicator" class="connection-status compact-connection-status" data-state="connecting" title="Connecting"><span class="status-dot" aria-hidden="true"></span><p id="status-line" class="status" role="status">Connecting…</p></div>
@@ -101,7 +92,12 @@
                   <button id="voice-call-button" class="icon-button" type="button" title="Start end-to-end encrypted voice call" aria-label="Start end-to-end encrypted voice call" hidden><i data-lucide="phone"></i></button>
                   <button id="notification-toggle" class="icon-button" type="button" title="Enable desktop notifications" aria-label="Enable desktop notifications" aria-pressed="false"><i data-lucide="bell"></i></button>
                   <button id="details-toggle" class="icon-button" type="button" title="Toggle conversation details" aria-label="Toggle conversation details" aria-expanded="true"><i data-lucide="info"></i></button>
-                  <button id="lock-button" class="icon-button" type="button" title="Lock this browser" aria-label="Lock this browser"><i data-lucide="lock-keyhole"></i></button>
+                   <button id="lock-button" class="icon-button" type="button" title="Lock this browser" aria-label="Lock this browser"><i data-lucide="lock-keyhole"></i></button>
+                  <div id="message-search-container" class="message-search" hidden>
+                    <i data-lucide="search"></i>
+                    <input id="message-search" type="search" placeholder="Search this conversation" autocomplete="off" aria-label="Search this conversation">
+                    <button id="message-search-close" class="icon-button" type="button" title="Close search" aria-label="Close search"><i data-lucide="x"></i></button>
+                  </div>
             </div>
           </header>
            <div id="chat-content" class="chat-content">

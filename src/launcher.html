@@ -12,6 +12,11 @@
       <span class="mark" aria-hidden="true">N</span>
       <h1>Naigi</h1>
       <p>Your conversations. Your server.</p>
+      <section id="saved-servers" class="saved-servers" aria-labelledby="saved-servers-heading" hidden>
+        <h2 id="saved-servers-heading">Saved servers</h2>
+        <p class="saved-servers-help">Select a server to connect. Forgetting removes only this shortcut.</p>
+        <ul id="saved-server-list"></ul>
+      </section>
       <form id="connect-form">
         <label for="server">Server address</label>
         <input id="server" type="url" placeholder="https://chat.example.com" required autocomplete="url" autofocus>

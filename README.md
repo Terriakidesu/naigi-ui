@@ -28,3 +28,7 @@ Run a [Naigi server](https://github.com/Terriakidesu/naigi) separately. See the 
 - [Development and packaging](docs/development.md)
 - [Security and limitations](docs/security.md)
 - [Changelog](CHANGELOG.md)
+
+## License
+
+Naigi Desktop is licensed under the [MIT License](LICENSE). Third-party dependencies and assets retain their own licenses.

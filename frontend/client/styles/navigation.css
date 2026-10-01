@@ -110,7 +110,7 @@
 .sidebar-user .voice-device-control .voice-dock-button { flex-basis: 30px; width: 30px; height: 34px; border-radius: 7px; }
 .sidebar-user .voice-device-control .voice-device-picker { flex-basis: 14px; width: 14px; height: 34px; border: 0; }
 .sidebar-user > .icon-button { flex: 0 0 30px; width: 30px; height: 34px; }
-.desktop-version { display: grid; gap: 0.18rem; padding: 0.42rem 0.75rem 0.5rem calc(var(--sidebar-rail-width, 72px) + 0.95rem); border-top: 1px solid var(--line); color: var(--text-faint); font-size: 0.59rem; line-height: 1.35; }
+.desktop-version { display: grid; gap: 1rem; max-width: 480px; margin-top: 1.5rem; padding: 1.25rem; border: 1px solid var(--line-soft); border-radius: 9px; color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; }
 .desktop-version span { display: flex; justify-content: space-between; gap: 0.5rem; }
 .desktop-version strong { color: var(--text-muted); font-weight: 650; }
 .sidebar-voice-connection { display: flex; align-items: center; gap: 0.55rem; padding: 0.7rem 0.6rem; border-top: 1px solid var(--line-soft); background: var(--bg-deep); }
@@ -155,3 +155,9 @@
 .channel-item.sidebar-room-drop-before { box-shadow: inset 0 2px var(--accent); }
 .channel-item.sidebar-room-drop-after { box-shadow: inset 0 -2px var(--accent); }
 .category-heading.sidebar-room-drop-category { background: color-mix(in srgb, var(--accent) 18%, var(--bg)); outline: 1px solid var(--accent); outline-offset: -1px; }
+.desktop-titlebar { position: fixed; inset: 0 0 auto; z-index: 10000; height: 32px; display: flex; align-items: center; justify-content: center; background: #11151b; color: #b9c1cc; border-bottom: 1px solid #242a33; -webkit-app-region: drag; user-select: none; }
+.desktop-titlebar-title { max-width: calc(100% - 320px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; font-weight: 600; }
+.desktop-titlebar-navigation { position: absolute; left: 10px; top: 0; height: 32px; display: flex; align-items: center; gap: 4px; -webkit-app-region: no-drag; }
+.desktop-titlebar-navigation button { width: 28px; height: 26px; padding: 0; border: 0; border-radius: 4px; background: transparent; color: #8993a1; font-size: 18px; line-height: 1; }
+.desktop-titlebar-navigation button:hover { background: #252b34; color: #f0f3f7; }
+body.desktop-window { padding-top: 32px; }

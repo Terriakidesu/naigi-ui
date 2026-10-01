@@ -1,4 +1,4 @@
-import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
@@ -81,5 +81,27 @@ await Promise.all([
     path.join(outputRoot, "livekit-e2ee-worker.mjs"),
   ),
 ]);
+
+const dependencyNotices = [];
+async function collectLicense(directory) {
+  let metadata;
+  try { metadata = JSON.parse(await readFile(path.join(directory, "package.json"), "utf8")); } catch { return; }
+  const files = (await readdir(directory)).filter((name) => /^(license|licence|copying|notice)(\.|$|-)/i.test(name));
+  const texts = [];
+  for (const file of files) {
+    try { texts.push(`${file}\n${await readFile(path.join(directory, file), "utf8")}`); } catch { /* Some packages use a license directory. */ }
+  }
+  dependencyNotices.push(`${metadata.name} ${metadata.version}\nLicense: ${typeof metadata.license === "string" ? metadata.license : "See package notices"}\n${texts.join("\n\n")}`);
+}
+const modulesRoot = path.join(root, "node_modules");
+for (const entry of await readdir(modulesRoot, { withFileTypes: true })) {
+  if (!entry.isDirectory() || entry.name.startsWith(".")) continue;
+  const directory = path.join(modulesRoot, entry.name);
+  if (entry.name.startsWith("@")) {
+    for (const name of await readdir(directory)) await collectLicense(path.join(directory, name));
+  } else await collectLicense(directory);
+}
+await writeFile(path.join(outputRoot, "third-party-licenses.txt"),
+  "Third-party package notices\nIncludes installed runtime and build dependencies.\n\n" + dependencyNotices.sort().join("\n\n" + "=".repeat(72) + "\n\n"));
 
 console.log(`Built the bundled Naigi frontend in ${path.relative(root, outputRoot)}/`);

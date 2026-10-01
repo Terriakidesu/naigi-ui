@@ -1483,7 +1483,12 @@ html[data-admin-theme="dark"] .instance-admin-page {
 .create-room-status:empty { display: none; }
 .create-room-dialog footer { display: flex; justify-content: flex-end; gap: 0.5rem; padding-top: 0.8rem; border-top: 1px solid var(--line-soft); }
 .create-room-dialog footer button { min-height: 36px; padding: 0.5rem 0.8rem; font-size: 0.75rem; }
-.history-unlock-field { display: grid; gap: 0.4rem; max-width: 420px; margin: 1rem 0; font-size: 0.75rem; }
+.history-unlock-field { display: grid; gap: 0.65rem; max-width: 640px; margin: 1.5rem 0; padding: 1rem; border: 1px solid var(--line-soft); border-radius: 9px; font-size: 0.75rem; }
+.history-unlock-controls { display: flex; align-items: center; gap: 0.65rem; }
+.history-unlock-controls input { flex: 1; min-width: 0; }
+.history-unlock-controls button { flex-shrink: 0; }
+.history-unlock-field > p { margin: 0; }
+@media (max-width: 600px) { .history-unlock-controls { flex-direction: column; align-items: stretch; } }
 .history-recovery-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
 .history-recovery-card { display: grid; align-content: start; gap: 0.65rem; min-width: 0; padding: 1rem; border: 1px solid var(--line-soft); border-radius: 9px; }
 .history-recovery-card > p { margin: 0; }
@@ -1498,3 +1503,7 @@ html[data-admin-theme="dark"] .instance-admin-page {
 .history-manual-backup { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--line-soft); }
 .history-manual-backup > summary { cursor: pointer; color: var(--text-muted); font-size: 0.78rem; }
 @media (max-width: 900px) { .history-recovery-grid { grid-template-columns: 1fr; } }
+.about-licenses { display: grid; gap: 0.75rem; margin-top: 2rem; }
+.about-licenses details { padding: 1rem; border: 1px solid var(--line-soft); border-radius: 9px; }
+.about-licenses summary { cursor: pointer; font-weight: 600; }
+.about-licenses pre { max-height: 360px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 0.75rem; line-height: 1.6; color: var(--text-muted); }

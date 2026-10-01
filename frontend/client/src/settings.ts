@@ -1588,7 +1588,41 @@ passwordForm.addEventListener("submit", async (event) => {
   }
 });
 
+const recoveryUnlockForm = document.getElementById("recovery-unlock-form") as HTMLFormElement;
+const recoveryUnlockButton = document.getElementById("recovery-unlock-button") as HTMLButtonElement;
+const recoveryUnlockStatus = document.getElementById("recovery-unlock-status") as HTMLElement;
+let recoveryUnlockPending: Promise<CryptoClient> | undefined;
+
+recoveryUnlockForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  void ensureRecoveryCrypto().catch(() => undefined);
+});
+
 async function ensureRecoveryCrypto() {
+  if (recoveryUnlockPending) return recoveryUnlockPending;
+  recoveryUnlockButton.disabled = true;
+  recoveryUnlockButton.textContent = "Unlocking…";
+  recoveryUnlockStatus.textContent = "Opening this device’s encrypted key store…";
+  recoveryUnlockStatus.classList.remove("error");
+  recoveryUnlockPending = openRecoveryCrypto();
+  try {
+    const client = await recoveryUnlockPending;
+    recoveryLocalPassphrase.disabled = true;
+    recoveryUnlockButton.textContent = "Recovery unlocked";
+    recoveryUnlockStatus.textContent = "Unlocked for this settings session. You can now restore, back up, or transfer history.";
+    return client;
+  } catch (error) {
+    recoveryUnlockButton.disabled = false;
+    recoveryUnlockButton.textContent = "Unlock recovery";
+    recoveryUnlockStatus.textContent = error instanceof Error ? error.message : "Unable to unlock recovery. Try again.";
+    recoveryUnlockStatus.classList.add("error");
+    throw error;
+  } finally {
+    recoveryUnlockPending = undefined;
+  }
+}
+
+async function openRecoveryCrypto() {
   if (!currentUserId) throw new Error("not_authenticated");
   if (recoveryCrypto) return recoveryCrypto;
   const passphrase = recoveryLocalPassphrase.value;

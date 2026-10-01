@@ -21,7 +21,7 @@
 .channel-icon svg { width: 22px; height: 22px; }
 .chat-header h2 { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.92rem; }
 .channel-subtitle { display: block; margin-top: 0.1rem; color: var(--text-faint); font-size: 0.62rem; }
-.chat-actions { gap: 0.15rem; }
+.chat-actions { gap: 0.15rem; flex-shrink: 0; }
 .compact-connection-status { gap: 0.35rem; margin-right: 0.35rem; }
 .compact-connection-status .status { max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.65rem; }
 .compact-connection-status .status-dot { width: 7px; height: 7px; box-shadow: none; }

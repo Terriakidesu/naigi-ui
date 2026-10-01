@@ -125,7 +125,12 @@ async function createProtocolHandler({ frontendRoot, serverOrigin, session, fetc
       "x-content-type-options": "nosniff",
       "referrer-policy": "no-referrer",
     });
-    if (extension === ".html") headers.set("content-security-policy", CONTENT_SECURITY_POLICY);
+    if (extension === ".html") {
+      headers.set("content-security-policy", CONTENT_SECURITY_POLICY);
+      if (!data.toString("utf8").includes('src="/desktop.js"')) {
+        data = Buffer.from(data.toString("utf8").replace("</body>", '<script type="module" src="/desktop.js"></script></body>'));
+      }
+    }
     if (path.basename(filename) === "push-sw.js") headers.set("service-worker-allowed", "/");
     return new Response(request.method === "HEAD" ? null : data, { status: 200, headers });
   };

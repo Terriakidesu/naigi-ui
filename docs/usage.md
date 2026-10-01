@@ -22,6 +22,8 @@ Use only the origin, without a path, query, or embedded credentials. Remote serv
 
 Use **File → Change server…** to choose another server. Each server has separate saved login, encrypted storage, and preferences; switching servers does not erase them.
 
+Servers are remembered when you connect, with the most recently used first. Select an address under **Saved servers** to connect directly. **Forget** removes only the shortcut, not that server's saved login, encrypted storage, or preferences. The previously saved address is included automatically.
+
 ## Versions
 
 The desktop app and server have independent versions. Both are shown in the launcher, chat sidebar, and **Help → About Naigi**.

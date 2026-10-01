@@ -2,6 +2,7 @@ const http = require("node:http");
 const { randomBytes } = require("node:crypto");
 const WebSocket = require("ws");
 const { APP_ORIGIN } = require("./desktop-protocol.cjs");
+const { cookieHeader } = require("./session-cookies.cjs");
 
 function validCloseCode(code) {
   return code === 1000
@@ -18,10 +19,6 @@ function closePeer(peer, code, reason) {
   } catch {
     peer.terminate();
   }
-}
-
-function cookieHeader(cookies) {
-  return cookies.map(({ name, value }) => `${name}=${value}`).join("; ");
 }
 
 function connectPair(client, remote) {
@@ -65,8 +62,8 @@ async function createRealtimeProxy({ serverOrigin, session }) {
     }
 
     void (async () => {
-      const cookies = await session.cookies.get({ url: `${APP_ORIGIN}/` });
       const target = new URL("/v1/realtime", serverOrigin);
+      const cookies = await session.cookies.get({ url: target.href });
       target.protocol = target.protocol === "https:" ? "wss:" : "ws:";
       const remote = new WebSocket(target, {
         origin: serverOrigin,

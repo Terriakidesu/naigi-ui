@@ -18,3 +18,10 @@ small { display: block; line-height: 1.5; }
 .version-card { display: grid; gap: 8px; margin: 14px 0 18px; padding: 12px 14px; border: 1px solid #303949; border-radius: 10px; background: #171d29; }
 .version-card > div { display: flex; justify-content: space-between; gap: 16px; color: #b2bacd; font-size: 13px; }
 .version-card strong { color: #eef1f8; font-weight: 650; text-align: right; }
+.saved-servers { margin-top: 24px; }
+.saved-servers h2 { margin: 0; font-size: 16px; }
+.saved-servers-help { margin: 8px 0 12px; font-size: 13px; line-height: 1.5; }
+#saved-server-list { display: grid; gap: 8px; padding: 0; margin: 0; list-style: none; }
+.saved-server-row { display: flex; align-items: stretch; gap: 8px; min-width: 0; }
+.saved-server-connect { flex: 1; min-width: 0; text-align: left; overflow-wrap: anywhere; font-size: 14px; }
+.saved-server-forget { flex: 0 0 auto; padding: 8px; font-size: 12px; }

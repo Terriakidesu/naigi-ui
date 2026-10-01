@@ -457,7 +457,9 @@ export class CryptoClient {
           // custom transport is session-authenticated rather than device-
           // authenticated, so include the local device id for that update.
           body.device_id = this.deviceId;
+          body.device_client = window.naigiDesktop ? "desktop" : "web";
           response = await this.api.cryptoRequest("/v1/crypto/keys/upload", body);
+          this.clientMetadataUploaded = true;
         }
         break;
       case RequestType.KeysQuery:
@@ -568,7 +570,16 @@ export class CryptoClient {
     return this.syncPromise;
   }
 
+  private clientMetadataUploaded = false;
+
   private async syncToDeviceInternal() {
+    if (!this.clientMetadataUploaded) {
+      await this.processOutgoingRequests();
+      if (!this.clientMetadataUploaded) {
+        await this.api.cryptoRequest("/v1/crypto/keys/upload", { device_id: this.deviceId, device_client: window.naigiDesktop ? "desktop" : "web" });
+        this.clientMetadataUploaded = true;
+      }
+    }
     const response = await this.api.toDevice(this.deviceId);
     if (response.events.length === 0) {
       await this.processOutgoingRequests();

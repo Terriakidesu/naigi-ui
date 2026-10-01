@@ -15,7 +15,10 @@ Start the [Naigi server](https://github.com/Terriakidesu/naigi) separately and s
 
 | Path | Purpose |
 | --- | --- |
-| `frontend/client/` | Editable user-facing chat frontend |
+| `frontend/client/src/` | Editable frontend TypeScript modules and tests |
+| `frontend/client/pages/` | HTML entry pages |
+| `frontend/client/public/` | Static browser assets copied into the bundle |
+| `frontend/client/styles/` | Source stylesheets concatenated into `app.css` |
 | `scripts/build-frontend.mjs` | Node/esbuild frontend bundler |
 | `src/main.cjs` | Electron windows, permissions, navigation, and API bridge |
 | `src/preload.cjs` | Launcher-only IPC bridge |
